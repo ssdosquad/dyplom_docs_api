@@ -1,6 +1,6 @@
 <?php
 
-$rootPath = "";
+$rootPath = "docs/";
 $currentUrl = trim(array_shift(explode("?", $_SERVER["REQUEST_URI"])), "/");
 $currentMethod = strtolower($_SERVER["REQUEST_METHOD"]);
 $currentOptions = ($currentMethod == "get") ? $_GET : $_POST;

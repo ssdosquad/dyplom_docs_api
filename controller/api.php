@@ -65,7 +65,7 @@ function new_deal(){
 
     $warrings = [];
     if($documents != []){
-        $sql_to_execute = "INSERT INTO deal_document (deal_id, path) VALUES "
+        $sql_to_execute = "INSERT INTO deal_document (deal_id, path) VALUES ";
         $i = 0;
         foreach($documents as $document){
             $extentions = array_slice(explode(".", $document['name']), -1)[0];
