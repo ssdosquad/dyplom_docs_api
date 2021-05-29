@@ -8,5 +8,49 @@
             "login", 
             "password"
         ]
+    },
+
+    {
+        "url" : "/getDealAll/",
+        "method" : "get",
+        "controller" : "api",
+        "function" : "get_deal_all",
+        "auth": true
+    },
+
+    {
+        "url" : "/getDealByCategory/",
+        "method" : "get",
+        "controller" : "api",
+        "function" : "get_deal_all",
+        "auth": true
+    },
+
+    {
+        "url" : "/newDeal/",
+        "method" : "post",
+        "controller" : "api",
+        "function" : "new_deal",
+        "auth": true,
+        "fields": [
+            "fullname", 
+            "date_born", 
+            "passport_series", 
+            "passport_id", 
+            "passport_issued",
+            "passport_date",
+            "short_text"
+        ]
+    },
+
+    {
+        "url" : "/getDeal/",
+        "method" : "post",
+        "controller" : "api",
+        "function" : "get_deal",
+        "auth": true,
+        "fields": [
+            "id"
+        ]
     }
 ]
