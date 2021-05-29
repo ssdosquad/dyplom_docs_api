@@ -22,7 +22,7 @@
         "url" : "/getDealByCategory/",
         "method" : "get",
         "controller" : "api",
-        "function" : "get_deal_all",
+        "function" : "get_deal_by_category",
         "auth": true
     },
 
