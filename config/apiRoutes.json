@@ -52,5 +52,13 @@
         "fields": [
             "id"
         ]
+    },
+
+    {
+        "url" : "/getCategoryAll/",
+        "method" : "get",
+        "controller" : "api",
+        "function" : "get_category_all",
+        "auth": true
     }
 ]
