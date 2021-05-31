@@ -6,7 +6,7 @@ function auth() {
 	$login    = verify_field("Логин", $currentOptions['login'], 0, 45);
 	$password = verify_field("Пароль", $currentOptions['password'], 0, 0);
 
-	if (!($query = dbQueryOne("SELECT id, password FROM account WHERE login = '{$login}'"))) {
+	if (!($query = dbQueryOne("SELECT * FROM account WHERE login = '{$login}'"))) {
 		send_answer(["Аккаунт с введённым логином отсутствует"]);
 	}
 
@@ -23,7 +23,7 @@ function auth() {
 		send_answer(["Неизвестная ошибка создания новой сессии"]);
 	}
 
-	send_answer(["session_key" => $session_key, "session_time" => $session_standing], true);
+	send_answer(["session_key" => $session_key, "session_time" => $session_standing, "account" => $query], true);
 }
 
 function get_deal_all() {
@@ -39,14 +39,15 @@ function get_deal_by_category() {
 }
 
 function new_deal() {
-	global $currentOptions;
-	$fullname        = verify_field("ФИО", $currentOptions['fullname'], 3, 600);
-	$date_born       = verify_field("Дата рождения", $currentOptions['date_born'], 2, 45);
+	global $currentOptions, $currentUser;
+	$account_id = $currentUser["id"];
+	$fullname = verify_field("ФИО", $currentOptions['fullname'], 3, 600);
+	$date_born = verify_field("Дата рождения", $currentOptions['date_born'], 2, 45);
 	$passport_series = verify_field("Серия паспорта", $currentOptions['passport_series'], 1, 11);
-	$passport_id     = verify_field("Номер паспорта", $currentOptions['passport_id'], 1, 11);
+	$passport_id = verify_field("Номер паспорта", $currentOptions['passport_id'], 1, 11);
 	$passport_issued = verify_field("Кем выдан паспорт", $currentOptions['passport_issued'], 1, 120);
-	$passport_date   = verify_field("Дата выдачи", $currentOptions['passport_date'], 1, 45);
-	$short_text      = verify_field("Краткое описание дела", $currentOptions['short_text'], 1, 45);
+	$passport_date = verify_field("Дата выдачи", $currentOptions['passport_date'], 1, 45);
+	$short_text = verify_field("Краткое описание дела", $currentOptions['short_text'], 1, 45);
 
 	$documents = [];
 	for ($i = 0; $i < 20; $i++) {
@@ -57,7 +58,7 @@ function new_deal() {
 		}
 	}
 
-	if (!dbExecute("INSERT INTO deal (fullname, date_born, passport_series, passport_id, passport_issued, passport_date, short_text) VALUES ('{$fullname}', '{$date_born}', '{$passport_series}', '{$passport_id}', '{$passport_issued}', '{$passport_date}', '{$short_text}')")) {
+	if (!dbExecute("INSERT INTO deal (account_id, fullname, date_born, passport_series, passport_id, passport_issued, passport_date, short_text) VALUES ('{$account_id}', '{$fullname}', '{$date_born}', '{$passport_series}', '{$passport_id}', '{$passport_issued}', '{$passport_date}', '{$short_text}')")) {
 		send_answer(["Неизвестная ошибка записи нового дела в базу"]);
 	}
 
@@ -101,4 +102,61 @@ function get_deal() {
 function get_category_all() {
 	$categorys = dbQuery("SELECT * FROM category");
 	send_answer(["categorys" => $categorys], true);
+}
+
+function get_account(){
+	global $currentUser;
+
+	$currentUser["active_deals"] = 0;
+	$currentUser["unactive_deals"] = 0;
+	$currentUser["all_deals"] = 0;
+
+	$deals = dbQuery("SELECT * FROM deal WHERE account_id = '{$currentUser['id']}'");
+	for($i = 0; $i < count($deals); $i++){ 
+		if($deals[$i]['status'] == "active"){ 
+			$currentUser["active_deals"]++;
+		} else {
+			$currentUser["unactive_deals"]++;
+		}
+		$currentUser["all_deals"]++;
+	}
+
+	send_answer(["account" => $currentUser], true);
+}
+
+function add_document(){
+	global $currentOptions, $currentUser;
+	$deal_id = $currentOptions['id'];
+	if ($deal = dbQueryOne("SELECT * FROM deal WHERE id = '{$deal_id}' AND account_id = '{$currentUser['id']}'")) {
+		$documents = [];
+		for ($i = 0; $i < 20; $i++) {
+			if (isset($_FILES['document'.$i]) && $_FILES['document'.$i]["name"] != null && isset($currentOptions['document_name'.$i])) {
+				$documents[] = [$_FILES['document'.$i], $currentOptions['document_name'.$i]];
+			} else {
+				break;
+			}
+		}
+		$warrings = [];
+		if ($documents != []) {
+			$sql_to_execute = "INSERT INTO deal_document (deal_id, title, path) VALUES ";
+			$i              = 0;
+			foreach ($documents as $document) {
+				$extentions = array_slice(explode(".", $document[0]['name']), -1)[0];
+				$path       = "/document/".time()."_".$i.".".$extentions;
+				if (upload_file($path, $document[0])) {
+					$sql_to_execute .= "('{$deal_id}', '{$document[1]}', '{$path}')";
+					if ($i < count($documents)-1) {$sql_to_execute .= ", ";
+					}
+				} else {
+					$warrings[] = "Документ ({$i}) не был загружен";
+				}
+				$i++;
+			}
+			if (!dbExecute($sql_to_execute)) {
+				$warrings[] = "Документы не были прикреплены";
+			}
+		}
+		send_answer($warrings, true);
+	}
+	send_answer(["Дело с указанным ID не найдено или оно Вам не принадлежит"]);
 }

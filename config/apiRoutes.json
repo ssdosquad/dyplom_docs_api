@@ -60,5 +60,24 @@
         "controller" : "api",
         "function" : "get_category_all",
         "auth": true
+    },
+
+    {
+        "url" : "/getAccount/",
+        "method" : "get",
+        "controller" : "api",
+        "function" : "get_account",
+        "auth": true
+    },
+
+    {
+        "url" : "/addDocument/",
+        "method" : "post",
+        "controller" : "api",
+        "function" : "add_document",
+        "auth": true,
+        "fields": [
+            "id"
+        ]
     }
 ]
