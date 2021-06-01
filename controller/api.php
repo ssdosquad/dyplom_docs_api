@@ -72,10 +72,10 @@ function new_deal() {
 	$warrings = [];
 	if ($documents != []) {
 		$sql_to_execute = "INSERT INTO deal_document (deal_id, path) VALUES ";
-		$i              = 0;
+		$i = 0;
 		foreach ($documents as $document) {
 			$extentions = array_slice(explode(".", $document['name']), -1)[0];
-			$path       = "/document/".time()."_".$i.".".$extentions;
+			$path = "/document/".$deal_id."_".time()."_".$i.".".$extentions;
 			if (upload_file($path, $document)) {
 				$sql_to_execute .= "('{$deal_id}', '{$path}')";
 				if ($i < count($documents)-1) {$sql_to_execute .= ", ";
@@ -98,7 +98,7 @@ function get_deal() {
 	$deal_id = $currentOptions['id'];
 	if ($deal = dbQueryOne("SELECT * FROM deal WHERE id = '{$deal_id}'")) {
 		$deal['documents'] = dbQuery("SELECT path FROM deal_document WHERE deal_id = '{$deal_id}'");
-		$deal['categorys'] = dbQuery("SELECT category.* FROM deal_category, category WHERE deal_category.deal_id = '{$deal_id}' AND category.id = deal_category.category_id");
+		$deal['category'] = dbQueryOne("SELECT category.* FROM deal_category, category WHERE deal_category.deal_id = '{$deal_id}' AND category.id = deal_category.category_id");
 		send_answer($deal, true);
 	}
 	send_answer(["Дело с указанным ID не найдено"]);
