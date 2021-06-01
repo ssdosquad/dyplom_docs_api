@@ -112,7 +112,7 @@ CREATE TABLE `deal` (
   `passport_series` int(11) NOT NULL,
   `passport_id` int(11) NOT NULL,
   `passport_issued` varchar(120) NOT NULL,
-  `passport_date` int(11) NOT NULL,
+  `password_date` varchar(45) DEFAULT NULL,
   `short_text` text NOT NULL,
   PRIMARY KEY (`id`),
   KEY `account_id` (`account_id`),
@@ -165,6 +165,7 @@ DROP TABLE IF EXISTS `deal_document`;
 CREATE TABLE `deal_document` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `deal_id` int(11) NOT NULL,
+  `title` varchar(120) NOT NULL,
   `path` varchar(255) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `deal_id` (`deal_id`),
@@ -190,4 +191,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-05-31 13:29:37
+-- Dump completed on 2021-06-01 11:42:46

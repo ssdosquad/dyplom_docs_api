@@ -48,6 +48,7 @@ function new_deal() {
 	$passport_issued = verify_field("Кем выдан паспорт", $currentOptions['passport_issued'], 1, 120);
 	$passport_date = verify_field("Дата выдачи", $currentOptions['passport_date'], 1, 45);
 	$short_text = verify_field("Краткое описание дела", $currentOptions['short_text'], 1, 45);
+	$category_id = verify_field("Категория", $currentOptions['category'], 1, 11);
 
 	$documents = [];
 	for ($i = 0; $i < 20; $i++) {
@@ -63,6 +64,10 @@ function new_deal() {
 	}
 
 	$deal_id = dbLastId();
+
+	if(!dbExecute("INSERT INTO deal_category (deal_id, category_id) VALUES ('{$deal_id}', '{$category_id}')")){
+		send_answer(["Неизвестная ошибка связи дела с категорией"]);
+	}
 
 	$warrings = [];
 	if ($documents != []) {
