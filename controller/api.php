@@ -71,13 +71,15 @@ function new_deal() {
 
 	$warrings = [];
 	if ($documents != []) {
-		$sql_to_execute = "INSERT INTO deal_document (deal_id, path) VALUES ";
+		$sql_to_execute = "INSERT INTO deal_document (deal_id, title, path) VALUES ";
 		$i = 0;
 		foreach ($documents as $document) {
-			$extentions = array_slice(explode(".", $document['name']), -1)[0];
+			$boom_point = explode(".", $document['name']);
+			$extentions = $boom_point[count($boom_point)-1];
+			$filename = $boom_point[count($boom_point)-2];
 			$path = "/document/".$deal_id."_".time()."_".$i.".".$extentions;
 			if (upload_file($path, $document)) {
-				$sql_to_execute .= "('{$deal_id}', '{$path}')";
+				$sql_to_execute .= "('{$deal_id}', '{$filename}', '{$path}')";
 				if ($i < count($documents)-1) {$sql_to_execute .= ", ";
 				}
 			} else {
