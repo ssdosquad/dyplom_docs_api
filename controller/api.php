@@ -97,9 +97,13 @@ function get_deal() {
 	global $currentOptions;
 	$deal_id = $currentOptions['id'];
 	if ($deal = dbQueryOne("SELECT * FROM deal WHERE id = '{$deal_id}'")) {
-		$deal['documents'] = dbQuery("SELECT path FROM deal_document WHERE deal_id = '{$deal_id}'");
-		$deal['category'] = dbQueryOne("SELECT category.* FROM deal_category, category WHERE deal_category.deal_id = '{$deal_id}' AND category.id = deal_category.category_id");
-		send_answer($deal, true);
+		$documents = dbQuery("SELECT path FROM deal_document WHERE deal_id = '{$deal_id}'");
+		$category = dbQueryOne("SELECT category.* FROM deal_category, category WHERE deal_category.deal_id = '{$deal_id}' AND category.id = deal_category.category_id");
+		send_answer([
+			"deal" => $deal,
+			"documents" => $documents,
+			"category" => $category
+		], true); 
 	}
 	send_answer(["Дело с указанным ID не найдено"]);
 }
