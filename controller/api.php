@@ -33,8 +33,8 @@ function get_deal_all() {
 
 function get_deal_by_category() {
 	global $currentOptions;
-	$category_id = $currentOptions['category_id'];
-	$deals       = dbQuery("SELECT deal.* FROM deal, deal_category WHERE deal.id = deal_category.deal_id AND deal_category.category_id = '{$category_id}'");
+	$category_id = $currentOptions['id'];
+	$deals = dbQuery("SELECT deal.* FROM deal, deal_category WHERE deal.id = deal_category.deal_id AND deal_category.category_id = '{$category_id}'");
 	send_answer($deals, true);
 }
 
@@ -150,10 +150,10 @@ function add_document(){
 		$warrings = [];
 		if ($documents != []) {
 			$sql_to_execute = "INSERT INTO deal_document (deal_id, title, path) VALUES ";
-			$i              = 0;
+			$i= 0;
 			foreach ($documents as $document) {
 				$extentions = array_slice(explode(".", $document[0]['name']), -1)[0];
-				$path       = "/document/".time()."_".$i.".".$extentions;
+				$path = "/document/".time()."_".$i.".".$extentions;
 				if (upload_file($path, $document[0])) {
 					$sql_to_execute .= "('{$deal_id}', '{$document[1]}', '{$path}')";
 					if ($i < count($documents)-1) {$sql_to_execute .= ", ";
@@ -170,4 +170,56 @@ function add_document(){
 		send_answer($warrings, true);
 	}
 	send_answer(["Дело с указанным ID не найдено или оно Вам не принадлежит"]);
+}
+
+function remove_document(){
+	global $currentOptions, $currentUser;
+	$document_id = $currentOptions['id'];
+	if (!dbQueryOne("SELECT deal.id FROM deal, deal_document WHERE deal_document.id = '{$document_id}' AND deal.id = deal_document.deal_id AND deal.account_id = '{$currentUser['id']}'")) {
+		send_answer(["Связанное дело Вам не принадлежит"]);
+	}
+	if(!dbExecute("DELETE FROM deal_document WHERE id = '{$document_id}'")){
+		send_answer(["Документ не был откреплён"]);
+	}
+	send_answer([], true);
+}
+
+function end_deal(){
+	global $currentOptions, $currentUser;
+	$deal_id = $currentOptions['id'];
+	if(!dbQueryOne("SELECT * FROM deal WHERE id = '{$deal_id}' AND account_id = '{$currentUser['id']}'")){
+		send_answer(["Дело Вам не принадлежит"]);
+	}
+	if(!dbExecute("UPDATE deal SET status = 'unactive' WHERE id = '{$deal_id}'")){
+		send_answer(["Неизвестная ошибка закрытия дела"]);
+	}
+	send_answer([], true);
+}
+
+function edit_deal(){
+	global $currentOptions, $currentUser;
+	$deal_id = $currentOptions['id'];
+
+	if(!dbQueryOne("SELECT * FROM deal WHERE id = '{$deal_id}' AND account_id = '{$currentUser['id']}'")){
+		send_answer(["Дело Вам не принадлежит"]);
+	}
+
+	$fullname = verify_field("ФИО", $currentOptions['fullname'], 3, 600);
+	$date_born = verify_field("Дата рождения", $currentOptions['date_born'], 2, 45);
+	$passport_series = verify_field("Серия паспорта", $currentOptions['passport_series'], 1, 11);
+	$passport_id = verify_field("Номер паспорта", $currentOptions['passport_id'], 1, 11);
+	$passport_issued = verify_field("Кем выдан паспорт", $currentOptions['passport_issued'], 1, 120);
+	$passport_date = verify_field("Дата выдачи", $currentOptions['passport_date'], 1, 45);
+	$short_text = verify_field("Краткое описание дела", $currentOptions['short_text'], 1, 45);
+	$category_id = verify_field("Категория", $currentOptions['category'], 1, 11);
+
+	if(!dbExecute("UPDATE deal SET fullname = '{$fullname}', date_born = '{$date_born}', passport_series = '{$passport_series}', passport_id = '{$passport_id}', passport_issued = '{$passport_issued}', passport_date = '{$passport_date}', short_text = '{$short_text}' WHERE id = '{$deal_id}'")){
+		send_answer(["Неизвестная ошибка обновления дела"]);
+	}
+
+	if(!dbExecute("UPDATE deal_category SET category_id = '{$category_id}' WHERE deal_id = '{$deal_id}'")){
+		send_answer(["Неизвестная ошибка обновления категории дела"]);
+	}
+
+	send_answer([], true);
 }

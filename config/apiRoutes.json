@@ -39,7 +39,8 @@
             "passport_id", 
             "passport_issued",
             "passport_date",
-            "short_text"
+            "short_text",
+            "category"
         ]
     },
 
@@ -78,6 +79,47 @@
         "auth": true,
         "fields": [
             "id"
+        ]
+    },
+
+    {
+        "url" : "/removeDocument/",
+        "method" : "get",
+        "controller" : "api",
+        "function" : "remove_document",
+        "auth": true,
+        "fields": [
+            "id"
+        ]
+    },
+
+    {
+        "url" : "/endDeal/",
+        "method" : "get",
+        "controller" : "api",
+        "function" : "end_deal",
+        "auth": true,
+        "fields": [
+            "id"
+        ]
+    },
+
+    {
+        "url" : "/editDeal/",
+        "method" : "post",
+        "controller" : "api",
+        "function" : "end_deal",
+        "auth": true,
+        "fields": [
+            "id",
+            "fullname", 
+            "date_born", 
+            "passport_series", 
+            "passport_id", 
+            "passport_issued",
+            "passport_date",
+            "short_text",
+            "category"
         ]
     }
 ]
