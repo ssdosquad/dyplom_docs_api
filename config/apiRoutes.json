@@ -27,6 +27,22 @@
     },
 
     {
+        "url" : "/getDealActive/",
+        "method" : "get",
+        "controller" : "api",
+        "function" : "get_deal_active",
+        "auth": true
+    },
+
+    {
+        "url" : "/getDealUnactive/",
+        "method" : "get",
+        "controller" : "api",
+        "function" : "get_deal_unactive",
+        "auth": true
+    },
+
+    {
         "url" : "/newDeal/",
         "method" : "post",
         "controller" : "api",

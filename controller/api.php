@@ -27,14 +27,24 @@ function auth() {
 }
 
 function get_deal_all() {
-	$deals = dbQuery("SELECT * FROM deal");
+	$deals = dbQuery("SELECT * FROM deal ORDER BY id DESC");
 	send_answer($deals, true);
 }
 
 function get_deal_by_category() {
 	global $currentOptions;
 	$category_id = $currentOptions['id'];
-	$deals = dbQuery("SELECT deal.* FROM deal, deal_category WHERE deal.id = deal_category.deal_id AND deal_category.category_id = '{$category_id}'");
+	$deals = dbQuery("SELECT deal.* FROM deal, deal_category WHERE deal.id = deal_category.deal_id AND deal_category.category_id = '{$category_id}' ORDER BY id DESC");
+	send_answer($deals, true);
+}
+
+function get_deal_active(){
+	$deals = dbQuery("SELECT * FROM deal WHERE status='active' ORDER BY id DESC");
+	send_answer($deals, true);
+}
+
+function get_deal_unactive(){
+	$deals = dbQuery("SELECT * FROM deal WHERE status='unactive' ORDER BY id DESC");
 	send_answer($deals, true);
 }
 
