@@ -109,7 +109,7 @@ function get_deal() {
 	global $currentOptions;
 	$deal_id = $currentOptions['id'];
 	if ($deal = dbQueryOne("SELECT * FROM deal WHERE id = '{$deal_id}'")) {
-		$documents = dbQuery("SELECT title, path FROM deal_document WHERE deal_id = '{$deal_id}'");
+		$documents = dbQuery("SELECT * FROM deal_document WHERE deal_id = '{$deal_id}'");
 		$category = dbQueryOne("SELECT category.* FROM deal_category, category WHERE deal_category.deal_id = '{$deal_id}' AND category.id = deal_category.category_id");
 		send_answer([
 			"deal" => $deal,
