@@ -48,6 +48,8 @@ function generateRandomString($length = 10) {
 }
 
 function send_answer($data = [], $type = false){
+    header('Content-Type: application/json; charset=utf-8');
+    
     $type = ($type) ? "success" : "error";
     
     exit(json_encode([

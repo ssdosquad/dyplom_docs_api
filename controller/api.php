@@ -233,3 +233,17 @@ function edit_deal(){
 
 	send_answer([], true);
 }
+
+function get_deal_template(){
+	global $currentOptions, $currentUser;
+
+	$deal_id = $currentOptions['id'];
+	$template_name = $currentOptions['template'];
+	$deal = dbQueryOne("SELECT * FROM deal WHERE id = '{$deal_id}' AND account_id = '{$currentUser['id']}'");
+
+	if(!$deal){
+		send_answer(["Дело Вам не принадлежит"]);
+	}
+
+	ready_template_download($deal, $template_name);
+}

@@ -137,5 +137,17 @@
             "short_text",
             "category"
         ]
+    },
+
+    {
+        "url" : "/getDealTemplate/",
+        "method" : "get",
+        "controller" : "api",
+        "function" : "get_deal_template",
+        "auth": true,
+        "fields": [
+            "id",
+            "template"
+        ]
     }
 ]

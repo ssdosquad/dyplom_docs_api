@@ -1,13 +1,13 @@
--- MySQL dump 10.13  Distrib 5.7.34, for Linux (x86_64)
+-- MySQL dump 10.13  Distrib 8.0.25, for Linux (x86_64)
 --
 -- Host: localhost    Database: docs
 -- ------------------------------------------------------
--- Server version	5.7.34-0ubuntu0.18.04.1
+-- Server version	8.0.25-0ubuntu0.20.04.1
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8 */;
+/*!50503 SET NAMES utf8mb4 */;
 /*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
 /*!40103 SET TIME_ZONE='+00:00' */;
 /*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
@@ -21,16 +21,16 @@
 
 DROP TABLE IF EXISTS `account`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `account` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `fullname` varchar(300) NOT NULL,
   `position` varchar(120) NOT NULL,
   `departament` varchar(120) NOT NULL,
   `login` varchar(45) NOT NULL,
   `password` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -49,17 +49,17 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `account_session`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `account_session` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `account_id` int(11) NOT NULL,
+  `id` int NOT NULL AUTO_INCREMENT,
+  `account_id` int NOT NULL,
   `session_key` varchar(255) NOT NULL,
-  `session_time` int(11) NOT NULL,
+  `session_time` int NOT NULL,
   `ip` varchar(12) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `account_id` (`account_id`),
   CONSTRAINT `account_session_ibfk_1` FOREIGN KEY (`account_id`) REFERENCES `account` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -78,12 +78,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `category`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `category` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -102,22 +102,23 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `deal`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `deal` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `account_id` int(11) DEFAULT NULL,
+  `id` int NOT NULL AUTO_INCREMENT,
+  `account_id` int DEFAULT NULL,
   `status` enum('active','unactive') DEFAULT 'active',
   `fullname` varchar(600) NOT NULL,
   `date_born` varchar(45) NOT NULL,
-  `passport_series` int(11) NOT NULL,
-  `passport_id` int(11) NOT NULL,
+  `passport_series` int NOT NULL,
+  `passport_id` int NOT NULL,
   `passport_issued` varchar(120) NOT NULL,
-  `password_date` varchar(45) DEFAULT NULL,
+  `passport_date` varchar(45) NOT NULL,
+  `passport_address` varchar(120) NOT NULL,
   `short_text` text NOT NULL,
   PRIMARY KEY (`id`),
   KEY `account_id` (`account_id`),
   CONSTRAINT `deal_ibfk_1` FOREIGN KEY (`account_id`) REFERENCES `account` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -135,15 +136,15 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `deal_category`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `deal_category` (
-  `deal_id` int(11) NOT NULL,
-  `category_id` int(11) NOT NULL,
+  `deal_id` int NOT NULL,
+  `category_id` int NOT NULL,
   KEY `category_id` (`category_id`),
   KEY `deal_id` (`deal_id`),
   CONSTRAINT `deal_category_ibfk_1` FOREIGN KEY (`category_id`) REFERENCES `category` (`id`),
   CONSTRAINT `deal_category_ibfk_2` FOREIGN KEY (`deal_id`) REFERENCES `deal` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -161,16 +162,16 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `deal_document`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
+/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `deal_document` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `deal_id` int(11) NOT NULL,
+  `id` int NOT NULL AUTO_INCREMENT,
+  `deal_id` int NOT NULL,
   `title` varchar(120) NOT NULL,
   `path` varchar(255) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `deal_id` (`deal_id`),
   CONSTRAINT `deal_document_ibfk_1` FOREIGN KEY (`deal_id`) REFERENCES `deal` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -191,4 +192,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-06-01 11:42:46
+-- Dump completed on 2021-06-04 10:18:25
