@@ -53,5 +53,5 @@ function ready_template_download($options, $template){
     unlink($temp_html_file);  // удаляем временный файл после загрузки
 
     $mpdf->Output(ROOTDIR.$temp_pdf_file); // Выводим в ответ
-    send_answer(["path" => $temp_pdf_file], true);
+    return $temp_pdf_file;
 }

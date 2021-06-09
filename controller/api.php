@@ -293,6 +293,7 @@ function get_deal_template(){
     // Собираем данные
 	$deal_id = $currentOptions['id'];
 	$template_name = $currentOptions['template'];
+	$template_title = $currentOptions['title'];
 	// Получаем дело по ID
 	$deal = dbQueryOne("SELECT * FROM deal WHERE id = '{$deal_id}' AND account_id = '{$currentUser['id']}'");
     // Если дело не получено
@@ -306,7 +307,11 @@ function get_deal_template(){
 	$deal["temp_mouth"] = date('m');
 	$deal["temp_year"] = date('Y');
     // Формируем документ
-	ready_template_download($deal, $template_name);
+	$path_document = ready_template_download($deal, $template_name);
+	// Записываем в базу данных
+	if(dbExecute("INSERT INTO deal_document (deal_id, title, path) VALUES ('{$deal_id}', '{$template_title}', '{$template_name}')")){
+		send_answer([], true);
+	}
 }
 
 function get_account_all(){
