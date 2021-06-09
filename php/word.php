@@ -28,7 +28,7 @@ function ready_template_download($options, $template){
 	$document->saveAs($temp_word_file);
 	// Открываем временный файл для конвертации в PDF
     $temp_html_file = ROOTDIR."/tmp/".time().".html";
-    $temp_pdf_file = ROOTDIR."/tmp/".time()."_pdf.pdf";
+    $temp_pdf_file = "/tmp/".time()."_pdf.pdf";
     // Загружаем созданный DOCX файл для конвертации в HTML
     $phpWord = \PhpOffice\PhpWord\IOFactory::load($temp_word_file);
     $xmlWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord , 'HTML');
@@ -52,6 +52,6 @@ function ready_template_download($options, $template){
     unlink($temp_word_file);  // удаляем временный файл после загрузки
     unlink($temp_html_file);  // удаляем временный файл после загрузки
 
-    $mpdf->Output($temp_pdf_file); // Выводим в ответ
+    $mpdf->Output(ROOTDIR.$temp_pdf_file); // Выводим в ответ
     send_answer(["path" => $temp_pdf_file], true);
 }
