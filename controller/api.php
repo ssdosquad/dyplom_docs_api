@@ -302,9 +302,9 @@ function get_deal_template(){
 	// Задаём текущую локаль для получения верной даты
 	setlocale(LC_ALL, 'rus_rus');
 	// Добавляем текущю дату
-	$deal["temp_day"] = date('Y');
-	$deal["temp_mouth"] = strftime('%B');
-	$deal["temp_year"] = date('d');
+	$deal["temp_day"] = date('d');
+	$deal["temp_mouth"] = date('m');
+	$deal["temp_year"] = date('Y');
     // Формируем документ
 	ready_template_download($deal, $template_name);
 }
