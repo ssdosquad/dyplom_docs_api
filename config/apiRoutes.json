@@ -149,5 +149,40 @@
             "id",
             "template"
         ]
+    },
+
+    {
+        "url" : "/getAccountAll/",
+        "method" : "get",
+        "controller" : "api",
+        "function" : "get_account_all",
+        "auth": true
+    },
+
+    {
+        "url" : "/createAccount/",
+        "method" : "post",
+        "controller" : "api",
+        "function" : "create_account",
+        "auth": true,
+        "fields": [
+            "type",
+            "fullname",
+            "position",
+            "departament",
+            "login",
+            "password"
+        ]
+    },
+
+    {
+        "url" : "/removeAccount/",
+        "method" : "get",
+        "controller" : "api",
+        "function" : "remove_account",
+        "auth": true,
+        "fields": [
+            "id"
+        ]
     }
 ]
