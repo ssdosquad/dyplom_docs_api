@@ -147,7 +147,8 @@
         "auth": true,
         "fields": [
             "id",
-            "template"
+            "template",
+            "title"
         ]
     },
 
