@@ -336,7 +336,7 @@ function create_account(){
     send_answer([], true);
 }
 
-function removeAccount(){
+function remove_account(){
     global $currentOptions, $currentUser;
     // Собираем данные
     $account_id = $currentOptions['id'];
