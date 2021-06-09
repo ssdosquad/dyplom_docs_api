@@ -299,6 +299,12 @@ function get_deal_template(){
 	if(!$deal){
 		send_answer(["Дело Вам не принадлежит"]);
 	}
+	// Задаём текущую локаль для получения верной даты
+	setlocale(LC_ALL, 'rus_rus');
+	// Добавляем текущю дату
+	$deal["temp_day"] = date('Y');
+	$deal["temp_mouth"] = strftime('%B');
+	$deal["temp_year"] = date('d');
     // Формируем документ
 	ready_template_download($deal, $template_name);
 }
@@ -318,7 +324,7 @@ function create_account(){
     $position = verify_field("Должность", $currentOptions['position'], 2, 120);
     $departament = verify_field("Отдел", $currentOptions['departament'], 2, 120);
     $login = verify_field("Логин", $currentOptions['login'], 1, 45);
-    $password = password_hash(verify_field("Имя", $currentOptions['password'], 6, 0), PASSWORD_DEFAULT);
+    $password = password_hash(verify_field("Пароль", $currentOptions['password'], 6, 0), PASSWORD_DEFAULT);
     // Проверка типа (если не админ - ошибка)
     if($currentUser['typeAccount'] != "admin") send_answer(["Ошибка доступа"]);
     // Выполняем запрос на создание
