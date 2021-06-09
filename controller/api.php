@@ -309,7 +309,7 @@ function get_deal_template(){
     // Формируем документ
 	$path_document = ready_template_download($deal, $template_name);
 	// Записываем в базу данных
-	if(dbExecute("INSERT INTO deal_document (deal_id, title, path) VALUES ('{$deal_id}', '{$template_title}', '{$template_name}')")){
+	if(dbExecute("INSERT INTO deal_document (deal_id, title, path) VALUES ('{$deal_id}', '{$template_title}', '{$path_document}')")){
 		send_answer([], true);
 	}
 }

@@ -27,8 +27,8 @@ function ready_template_download($options, $template){
 	$temp_word_file = ROOTDIR."/tmp/".time()."_word.docx";
 	$document->saveAs($temp_word_file);
 	// Открываем временный файл для конвертации в PDF
-    $temp_html_file = ROOTDIR."/tmp/".time().".html";
-    $temp_pdf_file = "/tmp/".time()."_pdf.pdf";
+    $temp_html_file = ROOTDIR."/document/".$template."_".time().".html";
+    $temp_pdf_file = "/document/".time().".pdf";
     // Загружаем созданный DOCX файл для конвертации в HTML
     $phpWord = \PhpOffice\PhpWord\IOFactory::load($temp_word_file);
     $xmlWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord , 'HTML');
